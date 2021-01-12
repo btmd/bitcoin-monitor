@@ -1,16 +1,17 @@
 #include "LedControl.h"
 #include <ESP8266WiFi.h>
-#include <ArduinoJson.h>
 #include <ESP8266HTTPClient.h>
+#include <ArduinoJson.h>
 
-/* Wifi config
+/*
+  Wifi config
   configure SSID (2.4Ghz) and password
 */
-// The SSID (name) of the Wi-Fi network you want to connect to
 const char* ssid     = "Thisisyourwifi";
 const char* password = "thisisyourwifipassword";
 
-/* LED config
+/*
+  LED config
   pin 14/D5 is connected to the DataIn
   pin 12/D6 is connected to the CLK
   pin 13/D7 is connected to LOAD
@@ -18,17 +19,23 @@ const char* password = "thisisyourwifipassword";
 */
 LedControl lc = LedControl(14, 12, 13, 1);
 
-/* GET request config
+/*
+  GET request config
+  fails on https :thinking:
 */
 const char* url = "http://api.coindesk.com/v1/bpi/currentprice.json";
 
+/*
+  Non-blocking delay setup
+  timer set for 5 minutes (300000ms)
+*/
 unsigned long delayStart = 0;
-bool delayRunning = false;
-// Timer set to 5 minutes
 unsigned long timerDelay = 300000;
 
+/*
+  Json parsing of bitcoin float value
+*/
 StaticJsonDocument<1024> doc;
-
 String bitcoinReadings;
 float bitcoinReadingsArr[1];
 
@@ -43,28 +50,33 @@ void setup() {
   /* and clear the display */
   lc.clearDisplay(0);
 
-
-  // setup WIFI
-  Serial.begin(115200);         // Start the Serial communication to send messages to the computer
+  /*
+    setup WIFI
+  */
+  // Start the Serial communication to send messages to the computer
+  Serial.begin(115200);
   delay(5);
   Serial.println('\n');
 
-  WiFi.begin(ssid, password);             // Connect to the network
+  // Connect to the network
+  WiFi.begin(ssid, password);             
   Serial.print("Connecting to ");
   Serial.print(ssid); Serial.println(" ...");
 
+  // Wait for the Wi-Fi to connect
   int i = 0;
-  while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
+  while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.print(++i); Serial.print(' ');
   }
 
+  // Send the IP address of the ESP8266 to the computer
   Serial.println('\n');
   Serial.println("Connection established!");
   Serial.print("IP address:\t");
-  Serial.println(WiFi.localIP());         // Send the IP address of the ESP8266 to the computer
+  Serial.println(WiFi.localIP());
 
-  // setup delay
+  // Initial start of delay
   delayStart = millis();
 
   // run once so we don't stare at a blank screen for 5 minutes
@@ -86,7 +98,7 @@ void setLcDigits(char digit, int digitInArray) {
 
 float bitcoinkurs() {
   HTTPClient http;
-  http.begin(url); // Works with HTTP
+  http.begin(url);
   int httpCode = http.GET();
   String payload = http.getString();
 
