@@ -27,7 +27,6 @@ bool delayRunning = false;
 // Timer set to 5 minutes
 unsigned long timerDelay = 300000;
 
-
 StaticJsonDocument<1024> doc;
 
 String bitcoinReadings;
@@ -107,8 +106,7 @@ void loop() {
   Serial.println("Next run in:");
   Serial.println((millis() - delayStart));
   Serial.println(timerDelay);
-  if (((millis() - delayStart) >= timerDelay
-  )) {
+  if (((millis() - delayStart) >= timerDelay)) {
   delayStart = millis();
     Serial.println(bitcoinkurs());
     char str_bpi_eur_rate[8];
