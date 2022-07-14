@@ -4,6 +4,9 @@ Using a ESP8266 and MAX7219
 
 grab a json file from coindesk with current values for bitcoin in EUR
 
+# dependencies
+* arduinojson
+* ledcontrol
 
 # ideas
 * show all currencies, not just EUR but also USD
