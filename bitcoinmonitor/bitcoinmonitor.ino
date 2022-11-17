@@ -7,8 +7,8 @@
   Wifi config
   configure SSID (2.4Ghz) and password
 */
-const char* ssid     = "Thisisyourwifi";
-const char* password = "thisisyourwifipassword";
+const char* ssid     = "";
+const char* password = "";
 
 /*
   LED config
